@@ -45,8 +45,36 @@ class SearchBar extends React.Component{
                 console.log(this.state);
             }
         });
-        
+    };
+
+    _objectifyForm(formArray) {//serialize data function
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++){
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
+    };
+
+
+    _updateDefaultLocation(){
+        let _this = this;
+        var formDataSerializedArray = jQuery("#location").serializeArray();
+        var formDataObject = this._objectifyForm(formDataSerializedArray);
+        console.log(JSON.stringify( formDataObject ));
+        jQuery.ajax({
+            type: "PUT",
+            url: "api/user",
+            data: JSON.stringify(formDataObject ),
+            success: function(){
+                console.log("success");
+                //_this.props.getUser();
+            },
+            dataType: "text",
+            contentType : "application/json"
+        });       
     }
+
+
 
     _formSubmit(event){
         //Set the value before submission unless it is the default text;
@@ -54,6 +82,7 @@ class SearchBar extends React.Component{
         if (location == ""){
             if (this.state.searchLocation != this.defaultSearchLocation){
                 jQuery("#location").val(this.state.searchLocation);
+                this._updateDefaultLocation();
             }else{
                 event.preventDefault();
             }

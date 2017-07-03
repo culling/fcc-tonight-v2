@@ -46,7 +46,7 @@ router.get("/:id", function(req, res){
             console.error(err);
         };
 
-        console.log(results);
+        //console.log(results);
         res.write(JSON.stringify(results, null, "\t"));
         res.end();
     });

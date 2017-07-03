@@ -5,6 +5,12 @@ import {render} from 'react-dom';
 // https://simonsmith.io/writing-react-components-as-commonjs-modules/
 
 //console.log("Card Loaded");
+function pad(number) {
+    if (number < 10) {
+        return '0' + number;
+    }
+    return number;
+};
 
 
 Date.prototype.shortDate = function() {
@@ -76,19 +82,13 @@ class PlaceCard extends React.Component{
             contentType: 'application/json', // for request
             dataType: 'json', //for response
             type: 'PUT',
-            data: JSON.stringify(newStateDiff) 
+            data: JSON.stringify(newStateDiff)
         });
     }
     //End NETWORK Sync
 
 
-    pad(number) {
-        if (number < 10) {
-            return '0' + number;
-        }
-        return number;
-    };
-
+    
 
 
 
