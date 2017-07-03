@@ -92,7 +92,7 @@ class ReactContainer extends React.Component{
                         </div>
                     }
                 </header>
-                    <SearchBar />
+                    <SearchBar      user={this.state.user} getUser={ this._getUser.bind(this) } />
                     <NewUserModal />
                     <LoginUserModal getUser={ this._getUser.bind(this) } />
 

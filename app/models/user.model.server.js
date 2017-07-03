@@ -50,7 +50,7 @@ var UserSchema = new Schema({
     state               : String,
     country             : String,
     messages            : Array,
-    defaultSearchLocation: String
+    defaultSearchLocation : String
 });
 
 UserSchema.pre('save', function (next){

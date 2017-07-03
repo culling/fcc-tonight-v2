@@ -4,11 +4,11 @@ import {render} from 'react-dom';
 
 
 class SearchBar extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-            user: undefined,
-            searchLocation: "My Search Location"
+            user: props.user,
+            searchLocation: (props.user? props.user.defaultSearchLocation : "My Search Location")
             
         }
         this.defaultSearchLocation = "My Search Location";
@@ -30,7 +30,7 @@ class SearchBar extends React.Component{
         }
 
         //User
-        
+        /*
         jQuery.ajax({
             method: 'GET',
             url:"/api/user",
@@ -45,6 +45,7 @@ class SearchBar extends React.Component{
                 console.log(this.state);
             }
         });
+        */
     };
 
     _objectifyForm(formArray) {//serialize data function
@@ -58,30 +59,35 @@ class SearchBar extends React.Component{
 
     _updateDefaultLocation(){
         let _this = this;
-        var formDataSerializedArray = jQuery("#location").serializeArray();
-        var formDataObject = this._objectifyForm(formDataSerializedArray);
-        console.log(JSON.stringify( formDataObject ));
+        var location = jQuery("#location").val();
+
+        var user = this.props.user;
+        var updatedUser = Object.assign(user, ({defaultSearchLocation: location}) );
+        console.log( updatedUser );
         jQuery.ajax({
             type: "PUT",
             url: "api/user",
-            data: JSON.stringify(formDataObject ),
+            data: JSON.stringify(updatedUser ),
             success: function(){
                 console.log("success");
-                //_this.props.getUser();
+                _this.props.getUser();
             },
             dataType: "text",
             contentType : "application/json"
-        });       
+        });
     }
 
 
 
     _formSubmit(event){
+        //event.preventDefault();
         //Set the value before submission unless it is the default text;
+        //this._updateDefaultLocation();
+        
         var location = jQuery("#location").val();
         if (location == ""){
             if (this.state.searchLocation != this.defaultSearchLocation){
-                jQuery("#location").val(this.state.searchLocation);
+                //jQuery("#location").val(this.state.searchLocation);
                 this._updateDefaultLocation();
             }else{
                 event.preventDefault();
