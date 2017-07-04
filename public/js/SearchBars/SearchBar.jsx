@@ -8,45 +8,18 @@ class SearchBar extends React.Component{
         super(props);
         this.state={
             user: props.user,
-            searchLocation: (props.user? props.user.defaultSearchLocation : "My Search Location")
-            
+            searchLocation: this.props.defaultLocation
         }
-        this.defaultSearchLocation = "My Search Location";
+        //this.defaultSearchLocation = "My Search Location";
     }
 
-    componentWillMount(){
-        jQuery.urlParam = function(name){
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            if (results==null){
-            return null;
-            }
-            else{
-            return decodeURI(results[1]) || 0;
-            }
-        }
-        var placeName = jQuery.urlParam('location') //|| this.defaultSearchLocation;
-        if (placeName){
-            placeName = placeName.replace("+", " ");
-        }
 
-        //User
-        /*
-        jQuery.ajax({
-            method: 'GET',
-            url:"/api/user",
-            success: (user)=>{
-                if (user.defaultLocation){
-                    user.defaultLocation = user.defaultLocation.replace("+", " ");
-                }
-                this.setState({ searchLocation: ( placeName || user.defaultLocation || this.defaultSearchLocation.replace("+", " ") )});
-                //}
-                this.setState({ user: user });
 
-                console.log(this.state);
-            }
-        });
-        */
-    };
+    componentWillReceiveProps(newProps){
+        //console.log(newProps.defaultLocation);
+        this.setState({searchLocation: newProps.defaultLocation});
+
+    }
 
     _objectifyForm(formArray) {//serialize data function
         var returnArray = {};
@@ -57,56 +30,16 @@ class SearchBar extends React.Component{
     };
 
 
-    _updateDefaultLocation(){
-        let _this = this;
-        var location = jQuery("#location").val();
-
-        var user = this.props.user;
-        var updatedUser = Object.assign(user, ({defaultSearchLocation: location}) );
-        console.log( updatedUser );
-        jQuery.ajax({
-            type: "PUT",
-            url: "api/user",
-            data: JSON.stringify(updatedUser ),
-            success: function(){
-                console.log("success");
-                _this.props.getUser();
-            },
-            dataType: "text",
-            contentType : "application/json"
-        });
-    }
-
-
-
     _formSubmit(event){
-        //event.preventDefault();
-        //Set the value before submission unless it is the default text;
-        //this._updateDefaultLocation();
+        event.preventDefault();
+        this.props.setLocation();
         
-        var location = jQuery("#location").val();
-        if (location == ""){
-            if (this.state.searchLocation != this.defaultSearchLocation){
-                //jQuery("#location").val(this.state.searchLocation);
-                this._updateDefaultLocation();
-            }else{
-                event.preventDefault();
-            }
-        }
     }
 
     render(){
-        //if (this.state.user){
-        //    var searchBar = <input className="col s9" placeholder={this.state.searchLocation} defaultValue={this.state.searchLocation || ""} name="location" type="text" ></input>
-        //}
-        //else{
-
-        
-
         var searchBar = <input ref={(input)=> this.location = input} id="location" 
             className="col s9" placeholder={this.state.searchLocation} 
             defaultValue={""} name="location" type="text" ></input>            
-        //}
 
         return (
         <div className="row">

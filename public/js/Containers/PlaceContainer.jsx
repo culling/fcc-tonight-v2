@@ -1,10 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-
 //Cards
 import PlaceCard from "./../Cards/PlaceCard.jsx";
-
 
 class PlaceContainer extends React.Component{
     constructor(){
@@ -12,26 +10,17 @@ class PlaceContainer extends React.Component{
         this.state={
             count: 0,
             detailsState: "details-div-hidden",
-            places:[]
+            places:[],
+            searchPlace: ""
         }
     }
 
     componentWillMount(){
+        this._getPlaces();
+    }
 
-        //Place
-        //var placeName = "Perth"
-
-        jQuery.urlParam = function(name){
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            if (results==null){
-            return null;
-            }
-            else{
-            return decodeURI(results[1]) || 0;
-            }
-        }
-
-        var placeName = jQuery.urlParam('location') || "";
+    _getPlaces(){
+        var placeName = this.props.location || "";
         this.setState({searchPlace:placeName});
 
         if (placeName){
@@ -39,48 +28,36 @@ class PlaceContainer extends React.Component{
                 method: 'GET',
                 url:("/api/place/"+ placeName),
                 success: (rawResult)=>{
-                    this.setState({detailsState: "details-div-visible"});
-
+                    //this.setState({detailsState: "details-div-visible"});
                     var places = [];
                     var resultObject = JSON.parse(rawResult);
-
                     for(var i = 0; i< resultObject.length; i++){
                         places.push(resultObject[i]);
                     }
-
                     this.setState({places: places });
-
                 }
             });
-
         }
+    };
 
 
-        //User
-        /*
-        jQuery.ajax({
-            method: 'GET',
-            url:"/api/user",
-            success: (user)=>{
-                this.setState({ user: user })
-            }
-        });
-        */
+    componentWillReceiveProps(newProps){
+        console.log("Component Will Receive Props");
+        console.log(newProps.location);
+        this._getPlaces();
     }
-    
+
 
     render(){
         return (
-            <div className="place-container row">
+            <div className="place-container">
+                <div className="row details-div-visible">
+                {
+                    this.state.places.map( (place, i) => 
+                    <PlaceCard key={i} place={place} user={this.props.user} />
+                )}
+                </div>
 
-                    {
-                        this.state.places.map( (place, i) => 
-                        <PlaceCard key={i} place={place} user={this.props.user} />
-                    ) }
-
-
-                
-                {(this.state.places.length == 0) &&
                 <div>
                     {(this.state.searchPlace != "") &&
                         <div>
@@ -88,7 +65,7 @@ class PlaceContainer extends React.Component{
                         </div>
                     }
                 </div>
-                }
+
             </div>
         )
     };

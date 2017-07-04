@@ -30,21 +30,21 @@ class ReactContainer extends React.Component{
                 "#home-container",
                 "#profile-container",
                 "#place-container"
-            ]
-
+            ], 
+            location: ""
         }
+
         //Binding to this for functions
         this._setActiveContainer = this._setActiveContainer.bind(this);
         this._getUser            = this._getUser.bind(this);
-
+        this._setLocation        = this._setLocation.bind(this);
     };
 
-    componentWillMount(){
-        this._getUser.bind(this);
-        this._getUser();
-    }
+
 
     componentDidMount(){
+        this._getUser.bind(this);
+        this._getUser();
         socket.on('new state', function(newState) {
             console.log("new state found");
             //this.setState(newState);
@@ -56,18 +56,47 @@ class ReactContainer extends React.Component{
     }
 
     _getUser(){
+        console.log("get user called");
         //User
         jQuery.ajax({
             method: 'GET',
             url:"/api/user",
             success: (user)=>{
                 this.setState({ user: user });
+                this.setState({location: user.defaultSearchLocation});
                 console.log(user);
             },
             contentType : "application/json",
             dataType: "JSON"
         });
     };
+
+    _setLocation(){
+        console.log("setLocation called");
+        let _this = this;
+        var getUser  = this._getUser;
+        var location = jQuery("#location").val();
+
+        var user = this.state.user;
+        var updatedUser = Object.assign(user, ({defaultSearchLocation: location}) );
+        console.log( updatedUser );
+        jQuery.ajax({
+            type: "PUT",
+            url: "api/user",
+            data: JSON.stringify(updatedUser ),
+            success: function(){
+                console.log("success");
+                _this.setState({location: location});
+                getUser();
+                ;
+
+            },
+            dataType: "text",
+            contentType : "application/json"
+        });
+    }
+
+
 
     _setActiveContainer(newActiveContainerId){
         console.log("Active Container ID changed");
@@ -92,7 +121,11 @@ class ReactContainer extends React.Component{
                         </div>
                     }
                 </header>
-                    <SearchBar      user={this.state.user} getUser={ this._getUser.bind(this) } />
+                    <SearchBar      user={this.state.user} 
+                        getUser={ this._getUser.bind(this) } 
+                        setLocation={ this._setLocation.bind(this)  }
+                        defaultLocation={ (this.state.location || "My Search Location") }
+                    />
                     <NewUserModal />
                     <LoginUserModal getUser={ this._getUser.bind(this) } />
 
@@ -104,7 +137,7 @@ class ReactContainer extends React.Component{
                     }
                     {(this.state.activeContainer === "#place-container")&&
                     <div id="place-container" >
-                        <PlaceContainer     user={this.state.user} />
+                        <PlaceContainer     user={this.state.user}  location={this.state.location} />
                     </div>
                     }
                     {/*(this.state.activeContainer === "#allBoard-container")&&
