@@ -8,33 +8,54 @@ var mongoExport = require("./../../config/mongo");
 var GuestlistModel   = mongoExport.guestlist.GuestlistModel;
 
 
-exports.create = function(guestlist){
-    console.log("Create - guestlist.controller.server - hit");
-    console.log(guestlist);
+exports.update = function(guestlist, done){
+    console.log("Update - guestlist.controller.server - hit");
+
+    //var guestlistString = JSON.stringify(guestlist);
+    //console.log(guestlistString);
+
+
+    GuestlistModel.update({"place_id": guestlist.place_id},
+        {$set: {"place_id": guestlist.place_id , "guests": guestlist.guests } },
+        {upsert: true},
+        function(err, found){
+            if(err){
+                console.error(err);
+                return done(err, null);
+            };
+        done(null, found); 
+    });
+
 
 }
 
 exports.getByPlaceId = function(place_id, done){
-    GuestlistModel.find({id:place_id},function(err, rawResults){
+    //GuestlistModel.collection.drop();
+
+    GuestlistModel.find({place_id:place_id},function(err, rawResultsArray){
         if(err){
             console.error(err);
             done(err, null);
-
         }
 
-        if (rawResults && (rawResults.length > 0)){
+        var rawResults = rawResultsArray[0];
+
+        if (rawResults ){
             var results = rawResults;
-            //console.log(results);
-            results.guestList.guests = rawResults.guestList.guests.filter((guest) => {
-                var currentDate = new Date().shortDate();
-                return guest.date == currentDate;
-            });
+            console.log(results);
+            if(results.guestList && results.guestList.guests){
+                results.guestList.guests = rawResults.guestList.guests.filter((guest) => {
+                    var currentDate = new Date().shortDate();
+                    return guest.date == currentDate;
+                });
+            }
             done(null, results);
 
         }else{
             //results = rawResults;
-            done(null, null);
-            
+            done(null, null);    
         }
+
+
     });
 };    

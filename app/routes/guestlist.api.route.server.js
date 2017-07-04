@@ -17,13 +17,18 @@ var guestlistController = require("./../controllers/guestlist.controller.server"
 
 
 router.put("/", function(req, res){
+    console.log("PUT guestList hit");
 
     var guestList = {
         place_id:   req.body.place_id,
         guests:     req.body.guests
     };
-    guestlistController.create(guestList, function(res){
+    console.log(guestList);
+    guestlistController.update(guestList, function(err, found){
+        if(err){console.error(err)};
 
+        res.write("done");
+        res.end();
     });
 });
 

@@ -29,8 +29,8 @@ module.exports  = function(){
 
         //On new state broadcast
         socket.on("new state", function(data){
-            console.log("New State - Express.js - 26");
-            console.log(data);
+            console.log("New State - Express.js");
+            //console.log(data);
             io.sockets.emit("new state", data);
         });
 
@@ -50,12 +50,9 @@ module.exports  = function(){
     //Passport
     app.use(passport.initialize());
     app.use(passport.session());
-    //app.use(flash());
 
 
-    //Views
-    //app.set("views", "./app/views");
-    //app.set("view engine", "ejs");
+
 
     //Routes
     var guestlist = require("./../app/routes/guestlist.api.route.server");

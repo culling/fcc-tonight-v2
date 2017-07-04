@@ -46,7 +46,7 @@ class PlaceCard extends React.Component{
                 let guestList = JSON.parse(results) ;
                 if (guestList != null){
 
-                    this.setState({guests: (guestList.guestList.guests || [] )});
+                    this.setState({guests: (guestList.guests || [] )});
 
                 }
             }
@@ -77,8 +77,8 @@ class PlaceCard extends React.Component{
     }
 
     saveStateToDB(newStateDiff) {
-
-        jQuery.ajax({ url: '/api/guestList', 
+        console.log(newStateDiff);
+        jQuery.ajax({ url: '/api/guestlist', 
             contentType: 'application/json', // for request
             dataType: 'json', //for response
             type: 'PUT',
