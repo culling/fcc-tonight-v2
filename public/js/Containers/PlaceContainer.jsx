@@ -62,7 +62,7 @@ class PlaceContainer extends React.Component{
                 </div>
 
                 <div>
-                    {(this.state.searchPlace != "") &&
+                    {((this.state.searchPlace != "") && (this.state.places && this.state.places.length && (this.state.places.length == 0))) &&
                         <div>
                             No results found
                         </div>
