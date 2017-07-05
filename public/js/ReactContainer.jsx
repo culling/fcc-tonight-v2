@@ -89,15 +89,17 @@ class ReactContainer extends React.Component{
                 console.log("success");
                 _this.setState({location: location});
                 getUser();
-
+                this._setActiveContainer("#place-container");
             },
             dataType: "text",
             contentType : "application/json"
         });
         }else{
             this.setState({location: location});
-            getUser();            
+            getUser();
+            this._setActiveContainer("#place-container");
         }
+
     }
 
 
@@ -120,7 +122,7 @@ class ReactContainer extends React.Component{
                 <b>Tonight</b>
                 <PrimaryNavbar user={this.state.user} setActiveContainer={  this._setActiveContainer.bind(this) } />
                     {this.state.user &&
-                        <div>
+                        <div className="subtle-debug">
                             <b>Current User {this.state.user.username}</b>
                         </div>
                     }
@@ -144,11 +146,7 @@ class ReactContainer extends React.Component{
                         <PlaceContainer     user={this.state.user}  location={this.state.location} />
                     </div>
                     }
-                    {/*(this.state.activeContainer === "#allBoard-container")&&
-                    <div id="allBoard-container" >
-                        <BoardContainer     user={this.state.user}  filterUser={{username:null, type:"all"}}/>
-                    </div>
-                    */}
+
 
 
             </div>
