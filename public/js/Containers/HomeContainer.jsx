@@ -43,9 +43,9 @@ class HomeContainer extends React.Component{
                     
                 </div>
                 }
-                <div className="container">
+                <div className="home-logo-div container">
                     <h3 className="home-text" >Open Guest List<span class="fa fa-drink prefix"></span></h3>
-                    <h5 className="home-text" >Free Code Camp - Nightlife Organisation Application</h5>
+                <h5 className="home-text" >Free Code Camp - Nightlife Organisation Application</h5>
                 </div>
             </div>
         )
