@@ -36,6 +36,7 @@ class PlaceCard extends React.Component{
 
     componentWillMount(){
         //console.log(this.props.place);
+        this.setState({guests: []});
         jQuery.ajax({
             method: 'GET',
             url:("/api/guestList/"+ this.props.place.place_id),
@@ -45,20 +46,27 @@ class PlaceCard extends React.Component{
 
                 let guestList = JSON.parse(results) ;
                 if (guestList != null){
-
+                    this.setState({guests: []});
                     this.setState({guests: (guestList.guests || [] )});
 
                 }
             }
         });
 
-        socket.on('new state', function(newState) {
+    }
 
-            
+    componentDidMount(){
+        socket.on('new state', function(newState) {            
             if (newState.place_id == this.state.place.place_id){
+                console.log(newState);
                 this.setState(newState);
             }
         }.bind(this));
+
+    }
+
+    componentWillUnmount(){
+        socket.removeListener('new state');
     }
 
     //NETWORK Sync
@@ -86,11 +94,6 @@ class PlaceCard extends React.Component{
         });
     }
     //End NETWORK Sync
-
-
-    
-
-
 
   _addToGuestList(e) {
     var username = this.props.user.username;
@@ -141,12 +144,15 @@ class PlaceCard extends React.Component{
                                 <br />
                                 <button onClick={this._setDetailsState.bind(this)} className="btn"> Current Guest List ({this.state.guests.length}) </button>
                                 
+                                {(this.props.user.type == "user") &&                        
                                 <ul className="collection">
                                     {this.state.guests.map((guest, i) => {
                                         return <li key={i} className={"collection-item avatar " + this.state.detailsState} style={{color: "black"}}>
                                             <i className="material-icons circle red" style={{ fontSize:"2em" }} >{ String(guest.username).toString()[0].toUpperCase() }</i><p>{guest.username}</p>
                                             </li>})}
                                 </ul>
+                                }
+
                             </div>
                             
                         }
@@ -159,9 +165,6 @@ class PlaceCard extends React.Component{
                     </div>
                 </div>
             </div>
-
-
-
         )
     }
 

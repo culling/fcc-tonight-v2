@@ -23,3 +23,24 @@ nav{
   color: hsl(190, 70%, 20%);
 }
 
+.collapsible-collection{
+  margin-top:0;
+  border-width:0 0 1 0;
+}
+
+.graph-text {
+    fill: white;
+    font-weight: 900;
+}
+
+.details-div-visible {
+  visibility: visible; }
+
+.details-div-hidden {
+  visibility: hidden;
+  display: none; }
+
+.response-option{
+  border: 1px solid lightblue;
+  border-radius: 5px;
+}

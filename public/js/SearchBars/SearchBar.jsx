@@ -31,9 +31,8 @@ class SearchBar extends React.Component{
 
 
     _formSubmit(event){
-        event.preventDefault();
         this.props.setLocation();
-        
+        //event.preventDefault();
     }
 
     render(){

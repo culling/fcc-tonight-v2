@@ -22,15 +22,11 @@ class HomeContainer extends React.Component{
    }
 
    componentDidMount(){   
-        socket.on('new state', function(newState) {
-            console.log("new state found");
-            //this.setState(newState);
 
-        }.bind(this));
    }
 
    componentWillUnmount(){
-        socket.removeListener('new state');
+
    }
 
     render(){
@@ -44,8 +40,8 @@ class HomeContainer extends React.Component{
                 </div>
                 }
                 <div className="home-logo-div container">
-                    <h3 className="home-text" >Open Guest List<span class="fa fa-drink prefix"></span></h3>
-                <h5 className="home-text" >Free Code Camp - Nightlife Organisation Application</h5>
+                    <h3 className="home-text" >Open Guest List</h3>
+                <h5 className="home-text" >Free Code Camp - Nightlife Organisation Application<span className="fa fa-glass prefix"></span></h5>
                 </div>
             </div>
         )

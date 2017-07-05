@@ -16,12 +16,14 @@ class PlaceContainer extends React.Component{
     }
 
     componentWillMount(){
-        this._getPlaces();
+        var placeName = this.props.location || "";
+        this._getPlaces(placeName);
     }
 
-    _getPlaces(){
-        var placeName = this.props.location || "";
-        this.setState({searchPlace:placeName});
+    _getPlaces(placeName){
+        //var placeName = this.props.location || "";
+        //this.setState({searchPlace:placeName});
+        console.log(placeName);
 
         if (placeName){
             jQuery.ajax({
@@ -42,12 +44,11 @@ class PlaceContainer extends React.Component{
 
 
     componentWillReceiveProps(newProps){
-        console.log("Component Will Receive Props");
-        //if(newProps.location){
-
-            console.log(newProps.location);
-            this._getPlaces();
-        //}
+        //console.log("Component Will Receive Props");
+        if(newProps.location){
+            //console.log(newProps.location);
+            this._getPlaces(newProps.location);
+        }
     }
 
 
@@ -62,7 +63,7 @@ class PlaceContainer extends React.Component{
                 </div>
 
                 <div>
-                    {((this.state.searchPlace != "") && (this.state.places && this.state.places.length && (this.state.places.length == 0))) &&
+                    {((this.state.searchPlace != "") && (this.state.places) && (this.state.places.length) && (this.state.places.length === 0)) &&
                         <div>
                             No results found
                         </div>

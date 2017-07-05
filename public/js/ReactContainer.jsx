@@ -45,14 +45,11 @@ class ReactContainer extends React.Component{
     componentDidMount(){
         this._getUser.bind(this);
         this._getUser();
-        socket.on('new state', function(newState) {
-            console.log("new state found");
-            //this.setState(newState);
-        }.bind(this));
+        this._setLocation();
     }
 
     componentWillUnmount(){
-        socket.removeListener('new state');
+        //socket.removeListener('new state');
     }
 
     _getUser(){
@@ -73,14 +70,18 @@ class ReactContainer extends React.Component{
 
     _setLocation(){
         console.log("setLocation called");
+
         let _this = this;
+        //_this.setState({location: "" });
+
         var getUser  = this._getUser;
         var location = jQuery("#location").val();
 
         var user = this.state.user;
+        if((user) && ( user.type == "user")){
         var updatedUser = Object.assign(user, ({defaultSearchLocation: location}) );
         console.log( updatedUser );
-        if(user.type == "user"){
+
         jQuery.ajax({
             type: "PUT",
             url: "api/user",
@@ -89,17 +90,27 @@ class ReactContainer extends React.Component{
                 console.log("success");
                 _this.setState({location: location});
                 getUser();
-                this._setActiveContainer("#place-container");
+                _this._setActiveContainer("#place-container");
             },
             dataType: "text",
             contentType : "application/json"
         });
-        }else{
+            }else{
+            jQuery.urlParam = function(name){
+                var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                if (results==null){
+                return null;
+                }
+                else{
+                return decodeURI(results[1]) || 0;
+                }
+            }
+            location = jQuery.urlParam('location') || "";
+
             this.setState({location: location});
-            getUser();
+            //getUser();
             this._setActiveContainer("#place-container");
         }
-
     }
 
 

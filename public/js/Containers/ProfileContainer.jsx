@@ -15,10 +15,6 @@ class ProfileContainer extends React.Component{
 
     componentWillMount(){
 
-        socket.on('new state', function(newState) {
-            console.log("new state found");
-            //this.setState(newState);
-        }.bind(this));
         Materialize.updateTextFields();
    }
 
