@@ -43,8 +43,11 @@ class PlaceContainer extends React.Component{
 
     componentWillReceiveProps(newProps){
         console.log("Component Will Receive Props");
-        console.log(newProps.location);
-        this._getPlaces();
+        //if(newProps.location){
+
+            console.log(newProps.location);
+            this._getPlaces();
+        //}
     }
 
 
@@ -70,7 +73,5 @@ class PlaceContainer extends React.Component{
         )
     };
 }
-
-
 
 export default PlaceContainer;

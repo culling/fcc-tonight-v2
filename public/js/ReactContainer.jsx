@@ -80,6 +80,7 @@ class ReactContainer extends React.Component{
         var user = this.state.user;
         var updatedUser = Object.assign(user, ({defaultSearchLocation: location}) );
         console.log( updatedUser );
+        if(user.type == "user"){
         jQuery.ajax({
             type: "PUT",
             url: "api/user",
@@ -88,12 +89,15 @@ class ReactContainer extends React.Component{
                 console.log("success");
                 _this.setState({location: location});
                 getUser();
-                ;
 
             },
             dataType: "text",
             contentType : "application/json"
         });
+        }else{
+            this.setState({location: location});
+            getUser();            
+        }
     }
 
 
